@@ -1,0 +1,50 @@
+package handlers
+
+import (
+	"ecommerce/config"
+	"ecommerce/database"
+	"ecommerce/utils"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+type ReqLogin struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func Login(w http.ResponseWriter, r *http.Request) {
+	var reqlogin ReqLogin
+	// creating decoder object
+	decoder := json.NewDecoder(r.Body)
+	decoder.DisallowUnknownFields()
+	err := decoder.Decode(&reqlogin)
+	if err != nil {
+		fmt.Println(err)
+		// http.Error(w, "Please provide valid json", 400)
+		http.Error(w, "Invalid Request", http.StatusBadRequest)
+		return
+	}
+	usr := database.Find(reqlogin.Email, reqlogin.Password)
+
+	if usr == nil {
+		http.Error(w, "Invalid Credentials", http.StatusBadRequest)
+		return
+	}
+
+	cnf := config.GetCongfig()
+	//JWT secret key is alternatively called access token
+	accessToken, err := utils.CreateJWT(cnf.JWTSecretKey, utils.Payload{
+		Sub:       usr.ID,
+		FirstName: usr.Firstname,
+		LastName:  usr.Lastname,
+		Email:     usr.Email,
+	})
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
+
+	// creating encoder object
+	utils.SendData(w, accessToken, http.StatusCreated)
+}
