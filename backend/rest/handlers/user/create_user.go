@@ -1,4 +1,4 @@
-package handlers
+package user
 
 import (
 	"ecommerce/database"
@@ -9,7 +9,7 @@ import (
 )
 
 // Using Post http Method to add product from user
-func CreateUser(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	var newUser database.User
 	// creating decoder object

@@ -1,4 +1,4 @@
-package handlers
+package product
 
 import (
 	"ecommerce/database"
@@ -8,7 +8,7 @@ import (
 )
 
 // creating GET http Method to get data from database.
-func GetProductsByID(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetProductsByID(w http.ResponseWriter, r *http.Request) {
 	// creating encoder object
 	productID := r.PathValue("id")
 

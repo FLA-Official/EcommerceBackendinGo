@@ -16,8 +16,9 @@ type Config struct {
 	JWTSecretKey string
 }
 
-var configuration Config
+var configuration *Config
 
+// load and validate config
 func loadConfig() {
 	err := godotenv.Load()
 	if err != nil {
@@ -56,19 +57,20 @@ func loadConfig() {
 		os.Exit(1)
 	}
 
-	configuration = Config{
-		Version:     version,
-		ServiceName: serviceName,
-		HttpPort:    port,
+	configuration = &Config{
+		Version:      version,
+		ServiceName:  serviceName,
+		HttpPort:     port,
+		JWTSecretKey: jwtSecretKey,
 	}
 
 }
 
-func init() {
-	loadConfig()
-}
-
 // reciver function for config
-func GetCongfig() Config {
+func GetCongfig() *Config {
+	//Stoping repeatative load
+	if configuration == nil {
+		loadConfig()
+	}
 	return configuration
 }

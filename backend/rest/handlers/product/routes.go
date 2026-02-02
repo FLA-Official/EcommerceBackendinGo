@@ -1,12 +1,11 @@
-package rest
+package product
 
 import (
-	"ecommerce/rest/handlers"
 	"ecommerce/rest/middlewares"
 	"net/http"
 )
 
-func initRoutes(mux *http.ServeMux, manager *middlewares.Manager) {
+func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middlewares.Manager) {
 	// ctrl := func(w http.ResponseWriter, r *http.Request) {
 	// 	log.Println("test")
 	// }
@@ -19,46 +18,34 @@ func initRoutes(mux *http.ServeMux, manager *middlewares.Manager) {
 	// )
 	mux.Handle("GET /products",
 		manager.With(
-			http.HandlerFunc(handlers.GetProducts),
+			http.HandlerFunc(h.GetProducts),
 		),
 	) // declaring Route
 
 	mux.Handle("POST /products",
 		manager.With(
-			http.HandlerFunc(handlers.CreateProduct),
+			http.HandlerFunc(h.CreateProduct),
 		),
 	) // declaring Route
 
 	mux.Handle("GET /products/{id}",
 		manager.With(
-			http.HandlerFunc(handlers.GetProductsByID),
+			http.HandlerFunc(h.GetProductsByID),
 		),
 	) // declaring Route
 
 	mux.Handle("PUT /products/{id}",
 		manager.With(
-			http.HandlerFunc(handlers.UpdateProducts),
-			middlewares.AuthenticateJWT,
+			http.HandlerFunc(h.UpdateProducts),
+			h.middlewares.AuthenticateJWT,
 		),
 	) // declaring Route
 
 	mux.Handle("DELETE /products/{id}",
 		manager.With(
-			http.HandlerFunc(handlers.DeleteProducts),
-			middlewares.AuthenticateJWT,
+			http.HandlerFunc(h.DeleteProducts),
+			h.middlewares.AuthenticateJWT,
 		),
 	) // declaring Route
-
-	mux.Handle("POST /users",
-		manager.With(
-			http.HandlerFunc(handlers.CreateUser),
-		),
-	) // declaring Route
-
-	mux.Handle("POST /users/login",
-		manager.With(
-			http.HandlerFunc(handlers.Login),
-		),
-	)
 
 }

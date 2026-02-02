@@ -2,6 +2,8 @@ package rest
 
 import (
 	"ecommerce/config"
+	"ecommerce/rest/handlers/product"
+	"ecommerce/rest/handlers/user"
 	"ecommerce/rest/middlewares"
 	"fmt"
 	"net/http"
@@ -9,7 +11,27 @@ import (
 	"strconv"
 )
 
-func Start(cnf config.Config) {
+// Adding Dependecny in a struct
+type Server struct {
+	config         *config.Config
+	productHandler *product.Handler
+	userHandler    *user.Handler
+}
+
+// Dependency Injection
+func NewServer(
+	config *config.Config,
+	productHandler *product.Handler,
+	userHandler *user.Handler,
+) *Server {
+	return &Server{
+		config:         config,
+		productHandler: productHandler,
+		userHandler:    userHandler,
+	}
+}
+
+func (server *Server) Start() {
 
 	//creating object for Middleware Manager
 	manager := middlewares.NewManager()
@@ -26,10 +48,13 @@ func Start(cnf config.Config) {
 	mux := http.NewServeMux()
 
 	wrappedMux := manager.WrapMux(mux)
+	//Route Registration
+	server.productHandler.RegisterRoutes(mux, manager)
+	server.userHandler.RegisterRoutes(mux, manager)
 
-	initRoutes(mux, manager)
+	// initRoutes(mux, manager)
 
-	addr := ":" + strconv.Itoa(int(cnf.HttpPort))
+	addr := ":" + strconv.Itoa(int(server.config.HttpPort))
 
 	fmt.Println("Server is running at the Port", addr)
 

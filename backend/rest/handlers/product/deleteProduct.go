@@ -1,4 +1,4 @@
-package handlers
+package product
 
 import (
 	"ecommerce/database"
@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func DeleteProducts(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) DeleteProducts(w http.ResponseWriter, r *http.Request) {
 
 	productID := r.PathValue("id")
 
