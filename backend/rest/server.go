@@ -11,14 +11,14 @@ import (
 	"strconv"
 )
 
-// Adding Dependecny in a struct
+// Server holds the dependencies required to run the HTTP server.
 type Server struct {
 	config         *config.Config
 	productHandler *product.Handler
 	userHandler    *user.Handler
 }
 
-// Dependency Injection
+// NewServer creates a new Server with injected dependencies.
 func NewServer(
 	config *config.Config,
 	productHandler *product.Handler,
@@ -31,9 +31,10 @@ func NewServer(
 	}
 }
 
+// Start configures middleware, registers routes, and starts the HTTP server.
 func (server *Server) Start() {
 
-	//creating object for Middleware Manager
+	// creating object for Middleware Manager
 	manager := middlewares.NewManager()
 	// appending middlewares in globalMiddlware array
 	manager.Use(

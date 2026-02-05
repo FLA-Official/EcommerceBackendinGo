@@ -9,6 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Config holds application configuration loaded from environment variables.
 type Config struct {
 	Version      string
 	ServiceName  string
@@ -18,7 +19,8 @@ type Config struct {
 
 var configuration *Config
 
-// load and validate config
+// loadConfig reads environment variables and validates required values.
+// It populates the package-level `configuration` variable.
 func loadConfig() {
 	err := godotenv.Load()
 	if err != nil {
@@ -66,9 +68,9 @@ func loadConfig() {
 
 }
 
-// reciver function for config
-func GetCongfig() *Config {
-	//Stoping repeatative load
+// GetConfig returns the loaded configuration. It loads environment variables once.
+func GetConfig() *Config {
+	// Prevent repeated loads
 	if configuration == nil {
 		loadConfig()
 	}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// RegisterRoutes registers product-related routes on the provided mux.
 func (h *Handler) RegisterRoutes(mux *http.ServeMux, manager *middlewares.Manager) {
 	// ctrl := func(w http.ResponseWriter, r *http.Request) {
 	// 	log.Println("test")

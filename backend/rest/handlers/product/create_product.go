@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-// Using Post http Method to add product from user
+// CreateProduct handles POST /products and adds a new product to the database.
 func (h *Handler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 
 	var newProduct database.Product

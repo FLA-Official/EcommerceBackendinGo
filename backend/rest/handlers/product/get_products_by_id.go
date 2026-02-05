@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-// creating GET http Method to get data from database.
+// GetProductsByID handles GET /products/{id} and returns the requested product if found.
 func (h *Handler) GetProductsByID(w http.ResponseWriter, r *http.Request) {
 	// creating encoder object
 	productID := r.PathValue("id")
@@ -25,5 +25,6 @@ func (h *Handler) GetProductsByID(w http.ResponseWriter, r *http.Request) {
 		utils.SendData(w, "Product not found", http.StatusNotFound)
 		return
 	}
-	utils.SendData(w, product, http.StatusNotFound)
+	// Return the found product with 200 OK
+	utils.SendData(w, product, http.StatusOK)
 }

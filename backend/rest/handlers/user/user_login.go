@@ -9,11 +9,13 @@ import (
 	"net/http"
 )
 
+// ReqLogin represents the expected JSON body for login requests.
 type ReqLogin struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
+// Login authenticates a user and returns a JWT access token on success.
 func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	var reqlogin ReqLogin
 	// creating decoder object
@@ -33,8 +35,8 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cnf := config.GetCongfig()
-	//JWT secret key is alternatively called access token
+	cnf := config.GetConfig()
+	// JWT secret key is alternatively called access token
 	accessToken, err := utils.CreateJWT(cnf.JWTSecretKey, utils.Payload{
 		Sub:       usr.ID,
 		FirstName: usr.Firstname,

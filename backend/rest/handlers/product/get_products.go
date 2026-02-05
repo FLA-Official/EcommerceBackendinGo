@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// creating GET http Method to get data from database.
+// GetProducts handles GET /products and returns a list of products.
 func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	// creating encoder object
 	utils.SendData(w, database.List(), http.StatusOK)
